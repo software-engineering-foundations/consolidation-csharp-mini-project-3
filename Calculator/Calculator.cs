@@ -1,8 +1,8 @@
 namespace Calculator;
 
-public class Calculator
+public static class Calculator
 {
-    public double Calculate(string expression)
+    public static double Calculate(string expression)
     {
         return 0;
     }
