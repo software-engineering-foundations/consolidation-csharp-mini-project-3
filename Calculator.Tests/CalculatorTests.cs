@@ -1,25 +1,19 @@
+using MyCalculator = Calculator.Calculator;
+
 [TestFixture]
 public class CalculatorTests
 {
-    private Calculator.Calculator calculator;
-
-    [SetUp]
-    public void SetUp()
-    {
-        calculator = new Calculator.Calculator();
-    }
-
     [TestCaseSource(nameof(ValidTestCases))]
     public void TestCalculatorWithValidInput(string expression, double expected)
     {
-        double result = calculator.Calculate(expression);
+        double result = MyCalculator.Calculate(expression);
         Assert.AreEqual(expected, result, 1e-9);
     }
 
     [TestCaseSource(nameof(InvalidTestCases))]
     public void TestCalculatorWithInvalidInput(string expression, Type expectedErrorType)
     {
-        Assert.Throws(expectedErrorType, () => calculator.Calculate(expression));
+        Assert.Throws(expectedErrorType, () => MyCalculator.Calculate(expression));
     }
 
     private static IEnumerable<TestCaseData> ValidTestCases()
@@ -115,13 +109,13 @@ public class CalculatorTests
         yield return new TestCaseData("5 / 0", typeof(DivideByZeroException));
         yield return new TestCaseData("6 / 0", typeof(DivideByZeroException));
         yield return new TestCaseData("7 % 0", typeof(DivideByZeroException));
-        yield return new TestCaseData("0 * -1", typeof(DivideByZeroException));
-        yield return new TestCaseData("1234567890.0 * 567898765", typeof(OverflowException));
         yield return new TestCaseData("4 +", typeof(FormatException));
         yield return new TestCaseData("/ 10", typeof(FormatException));
         yield return new TestCaseData("1 + 9 2", typeof(FormatException));
         yield return new TestCaseData("4 * / 5", typeof(FormatException));
         yield return new TestCaseData("12. 5 - 50 / 8", typeof(FormatException));
+        yield return new TestCaseData("12 .5 - 50 / 8", typeof(FormatException));
+        yield return new TestCaseData("12 . 5 - 50 / 8", typeof(FormatException));
         yield return new TestCaseData("1 + 9) * 2", typeof(FormatException));
         yield return new TestCaseData("4 * (3 - 5", typeof(FormatException));
         yield return new TestCaseData("(12345 / (10 % 100)", typeof(FormatException));
